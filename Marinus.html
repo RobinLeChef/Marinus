@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pour Toi ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --dark-bg: #1a0b0f;
+            --card-bg: #2d1b22;
+            --text: #fceceb;
+            --gold: #d4af37;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 50px;
+        }
+
+        /* --- En-tête --- */
+        header {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #3d151e 0%, var(--dark-bg) 70%);
+            position: relative;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem; /* Légèrement réduit pour mobile */
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+            animation: pulse 2s infinite;
+            margin-bottom: 20px;
+        }
+
+        .subtitle { font-size: 1.1rem; margin-top: 10px; opacity: 0.9; line-height: 1.5; }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            opacity: 0.6;
+            font-size: 2rem;
+        }
+
+        /* --- Timeline --- */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        /* La ligne verticale */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .left { left: 0; text-align: right; }
+        .right { left: 50%; text-align: left; }
+
+        .content {
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 77, 109, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .date {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .container::after {
+            content: '❤️';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -12px;
+            background-color: var(--dark-bg);
+            border: 2px solid var(--primary);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .right::after { left: -12px; }
+
+        /* --- Section Finale --- */
+        .finale {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .world {
+            width: 150px;
+            height: 150px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_Marble_2002.png/1200px-Blue_Marble_2002.png');
+            background-size: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(100, 149, 237, 0.4) inset, 0 0 20px rgba(100, 149, 237, 0.2);
+            animation: spin 15s linear infinite;
+            margin-bottom: 40px;
+            cursor: pointer;
+        }
+
+        .envelope-container {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .envelope-container:hover { transform: scale(1.1); }
+
+        .envelope {
+            width: 120px;
+            height: 80px;
+            background: #ff8fa3;
+            position: relative;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 0 20px rgba(255,77,109,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-top: 50px solid #ff4d6d;
+            transform-origin: top;
+            transition: transform 0.5s;
+            z-index: 3;
+        }
+        
+        .envelope.open::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .click-text { margin-top: 15px; font-size: 0.9rem; animation: pulse 1.5s infinite; }
+
+        /* --- Modale / Lettre (CORRIGÉ POUR SCROLL) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            overflow: hidden; /* Empêche le fond de scroller */
+        }
+
+        .letter-content {
+            background-color: #fff0f5;
+            margin: 5% auto; /* Marge réduite */
+            padding: 30px 25px;
+            border: 2px solid var(--gold);
+            width: 90%;
+            max-width: 500px;
+            color: #4a4a4a;
+            border-radius: 5px;
+            position: relative;
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.6rem;
+            line-height: 1.5;
+            box-shadow: 0 0 50px rgba(255, 77, 109, 0.4);
+            animation: slideUp 0.5s ease-out;
+            
+            /* AJOUTS POUR LE SCROLL */
+            max-height: 85vh; /* Hauteur max de 85% de l'écran */
+            overflow-y: auto; /* Scroll vertical si ça dépasse */
+        }
+
+        /* Scrollbar stylisée pour la lettre */
+        .letter-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .letter-content::-webkit-scrollbar-track {
+            background: #fff0f5; 
+        }
+        .letter-content::-webkit-scrollbar-thumb {
+            background: #ff8fa3; 
+            border-radius: 4px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: sans-serif;
+            position: sticky; /* Le bouton croix reste en haut */
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+        @keyframes spin { from { background-position: 0 0; } to { background-position: 200% 0; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        @media screen and (max-width: 600px) {
+            .timeline::after { left: 31px; }
+            .container { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .container::after { left: 18px; }
+            .left, .right { left: 0%; text-align: left; }
+            
+            /* Ajustement police lettre sur mobile */
+            .letter-content { font-size: 1.4rem; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Joyeuse Saint Valentin</h1>
+        <p class="subtitle">Comme j'ai du mal à t'expliquer pourquoi je t'aime autant, il n'y a pas de meilleur moyen que de te montrer tout le parcours qui nous a amenés jusque-là !</p>
+        <div class="scroll-indicator">⬇️</div>
+    </header>
+
+    <div class="timeline">
+        
+        <div class="container left">
+            <div class="content">
+                <span class="date">31 Octobre 2023</span>
+                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=400&q=80" alt="Notre rencontre" class="photo-frame">
+                <h2>Notre Rencontre</h2>
+                <p>Une pirate et un twister, ça dérape vite.</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Nouvel an 2023</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>Alison : "Tu es qui pour Robin ?"</h2>
+                <p>Après une arcade recousue et quelques mois d'Erasmus, les choses commencèrent à se concrétiser et tu as remué ciel et terre pour venir me voir à Valence.</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">22 Février 2024</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>Le début d'une belle histoire</h2>
+                <p>Suite à 2 mois à vivre comme un vrai couple, sans réellement mettre un mot sur notre relation, nous décidons d'un weekend romantique entre ski, randonnée et visite de Lyon, et nous concluons en débutant une belle histoire.</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Mars 2024</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>La toile d'araignée</h2>
+                <p>Même avec la distance nous arrivions à créer une relation. Tu es même venue me voir à Toulouse et nous y avons fait beaucoup de bêtises.</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">Avril 2024</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>Une nouvelle randonnée</h2>
+                <p>Petit passage dans les montagnes roumaines avec du bon chocolat.</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Mai 2024</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>Le bal</h2>
+                <p>Ça n'a pas été voté, mais on a été les plus beaux de la soirée.</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">Juillet 2024</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>Notre première expérience de vie commune</h2>
+                <p>Pendant plus de 2 semaines nous en avons profité. Plage, randonnée (encore), visite de Carcassonne et un trajet retour EXCEPTIONNEL.</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Été 2024</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>L'été magique</h2>
+                <p>Des vacances inoubliables, suivies d'un concert génial et de supers moments à Lyon pour finir !</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">Octobre 2024</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>Merde mon passeport !</h2>
+                <p>J'ai fait 3 descentes d'organes mais j'ai réussi à venir te voir, et ça valait le coup !</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Novembre 2024</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>On a vraiment fait tout ça en 1 mois ?</h2>
+                <p>Début novembre nous avons fait une randonnée magnifique en Roumanie où nous avons pu croiser un renard. Quelques semaines plus tard tu es venue me rendre visite à Paris. Nous avons exploré la ville, vu un match de l'équipe de France de rugby et fini avec de sacrées traces de griffures.</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">Décembre 2024</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>Maladie</h2>
+                <p>Après avoir fêté mon anniversaire, nous sommes partis dans le Morvan puis dans les Pyrénées pour fêter le nouvel an. Malgré nos vomitos j'ai quand même passé de supers moments ! C'était quand même la première fois que l'on s'envoyait en l'air.</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Février 2025</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>Pas de stage</h2>
+                <p>À la fin de mes partiels, nous avons passé de beaux moments ensemble pour la Saint-Valentin, au ski et à Budapest.</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">Mars 2025</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>Anniversaire</h2>
+                <p>Pour ton anniversaire j'ai fait l'erreur de t'offrir le pire cadeau possible : un coquetier. Désolé...</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Mai 2025</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>Gros match</h2>
+                <p>Pour que tu puisses me voir jouer au rugby, j'ai joué un match amical contre des Roumains. Et le drame est arrivé, mon genou s'est cassé.</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">Été 2025</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>J'ai pas les mots</h2>
+                <p>Encore une année de plus à me dire que c'était probablement l'un des meilleurs étés de ma vie. Entre le concert d'Imagine Dragons, nos vacances en Croatie (encore choqué de ton caca) et mon opération (oups).</p>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="date">Décembre 2025</span>
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <h2>Ça devient sérieux</h2>
+                <p>Après avoir fêté mon anniversaire, j'ai rencontré la belle-famille. C'était génial, je suis trop heureux d'avoir passé cette étape. Après le nouvel an j'ai eu une autre occasion de draguer les mamies !</p>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="date">Aujourd'hui</span>
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <h2>Je t'aime</h2>
+                <p>Merci d'être toi. Merci d'être là quand j'ai besoin de toi.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="finale">
+        <p style="margin-bottom:20px; opacity:0.7;">Il nous reste encore tant de moments à vivre et de pays à explorer ensemble.</p>
+        
+        <div class="world"></div>
+        <div class="envelope-container" id="envelopeBtn">
+            <div class="envelope" id="envelope">
+                <span style="font-size: 24px;">💌</span>
+            </div>
+            <div class="click-text">Clique pour ouvrir</div>
+        </div>
+    </div>
+
+    <div id="letterModal" class="modal">
+        <div class="letter-content">
+            <span class="close">&times;</span>
+            <h2>Marinus,</h2>
+            <br>
+            <p>
+                Comme je ne suis pas avec toi cette année, j'ai dû improviser avec quelque chose d'un peu différent.
+                <br><br>
+                J'espère que cette rétrospective t'a plu. Ce n'est que le début d'une longue aventure que nous allons vivre ensemble.
+                <br><br>
+                Même si nous ne pouvons pas être ensemble pour cette Saint-Valentin, nous rattraperons ça le 27.
+                <br><br>
+                En tout cas profite de ton séjour en Angleterre, amusez-vous bien toi et ta sœur.
+                <br><br>
+                Si vous sortez ce soir, sache que le monde va te penser célibataire. Tu vas donc devoir combattre l'envahisseur.
+                <br><br>
+                Je te souhaite bon courage pour cette bataille qui s'annonce.
+                <br><br>
+                En vrai, hors blague, je voulais te dire que je suis hyper fier de nous. Même si on a eu des moments difficiles, on les a toujours surmontés ensemble.
+                <br><br>
+                Quand je regarde notre histoire dans son ensemble, je me rends compte à quel point tu m'as apporté du bonheur. Merci pour ça.
+                <br><br>
+                Même si les grandes déclas c'est pas ton fort, sache que tu m'apportes déjà énormément. Tu m'as fait grandir et tu as toujours été là pour moi.
+                <br><br>
+                En seulement 2 ans on a vécu plus de choses que beaucoup de couples et ce n'est pas prêt de s'arrêter.
+                <br><br>
+                Je t'aime plus que tout.
+                <br><br>
+                Joyeuse Saint-Valentin ❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animation d'apparition au scroll (Timeline)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.container').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Gestion de l'enveloppe et du message
+        const modal = document.getElementById("letterModal");
+        const btn = document.getElementById("envelopeBtn");
+        const envelope = document.getElementById("envelope");
+        const span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            envelope.classList.add("open"); // Animation ouverture enveloppe
+            setTimeout(() => {
+                modal.style.display = "block"; // Affiche le message après 0.5s
+            }, 500);
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+            envelope.classList.remove("open");
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                envelope.classList.remove("open");
+            }
+        }
+    </script>
+</body>
+</html>
