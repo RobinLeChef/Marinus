@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow"> 
     <title>Pour Toi ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -39,7 +40,7 @@
 
         h1 {
             font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem; /* Légèrement réduit pour mobile */
+            font-size: 3.5rem;
             color: var(--primary);
             text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
             animation: pulse 2s infinite;
@@ -64,7 +65,6 @@
             padding: 20px;
         }
 
-        /* La ligne verticale */
         .timeline::after {
             content: '';
             position: absolute;
@@ -110,6 +110,7 @@
             display: block;
         }
 
+        /* --- Style des Photos --- */
         .photo-frame {
             width: 100%;
             height: 200px;
@@ -117,6 +118,20 @@
             border-radius: 10px;
             margin-bottom: 10px;
             border: 2px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+        .photo-frame:hover { transform: scale(1.02); }
+
+        /* --- GRILLE MULTI-PHOTOS --- */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .photo-grid .photo-frame {
+            height: 140px; /* Plus petit pour tenir côte à côte */
+            margin-bottom: 0;
         }
 
         .container::after {
@@ -200,7 +215,7 @@
 
         .click-text { margin-top: 15px; font-size: 0.9rem; animation: pulse 1.5s infinite; }
 
-        /* --- Modale / Lettre (CORRIGÉ POUR SCROLL) --- */
+        /* --- Modale / Lettre --- */
         .modal {
             display: none;
             position: fixed;
@@ -211,12 +226,12 @@
             height: 100%;
             background-color: rgba(0,0,0,0.85);
             backdrop-filter: blur(5px);
-            overflow: hidden; /* Empêche le fond de scroller */
+            overflow: hidden;
         }
 
         .letter-content {
             background-color: #fff0f5;
-            margin: 5% auto; /* Marge réduite */
+            margin: 5% auto;
             padding: 30px 25px;
             border: 2px solid var(--gold);
             width: 90%;
@@ -229,23 +244,12 @@
             line-height: 1.5;
             box-shadow: 0 0 50px rgba(255, 77, 109, 0.4);
             animation: slideUp 0.5s ease-out;
-            
-            /* AJOUTS POUR LE SCROLL */
-            max-height: 85vh; /* Hauteur max de 85% de l'écran */
-            overflow-y: auto; /* Scroll vertical si ça dépasse */
+            max-height: 85vh;
+            overflow-y: auto;
         }
 
-        /* Scrollbar stylisée pour la lettre */
-        .letter-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        .letter-content::-webkit-scrollbar-track {
-            background: #fff0f5; 
-        }
-        .letter-content::-webkit-scrollbar-thumb {
-            background: #ff8fa3; 
-            border-radius: 4px;
-        }
+        .letter-content::-webkit-scrollbar { width: 8px; }
+        .letter-content::-webkit-scrollbar-thumb { background: #ff8fa3; border-radius: 4px; }
 
         .close {
             color: #aaa;
@@ -253,8 +257,7 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            font-family: sans-serif;
-            position: sticky; /* Le bouton croix reste en haut */
+            position: sticky;
             top: 0;
             right: 0;
             z-index: 10;
@@ -270,8 +273,6 @@
             .container { width: 100%; padding-left: 70px; padding-right: 25px; }
             .container::after { left: 18px; }
             .left, .right { left: 0%; text-align: left; }
-            
-            /* Ajustement police lettre sur mobile */
             .letter-content { font-size: 1.4rem; padding: 20px; }
         }
     </style>
@@ -298,7 +299,10 @@
         <div class="container right">
             <div class="content">
                 <span class="date">Nouvel an 2023</span>
-                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <div class="photo-grid">
+                    <img src="nouvel_an_1.jpg" alt="Nouvel an 1" class="photo-frame">
+                    <img src="nouvel_an_2.jpg" alt="Nouvel an 2" class="photo-frame">
+                </div>
                 <h2>Alison : "Tu es qui pour Robin ?"</h2>
                 <p>Après une arcade recousue et quelques mois d'Erasmus, les choses commencèrent à se concrétiser et tu as remué ciel et terre pour venir me voir à Valence.</p>
             </div>
@@ -307,16 +311,16 @@
         <div class="container left">
             <div class="content">
                 <span class="date">22 Février 2024</span>
-                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=400&q=80" alt="Aujourd'hui" class="photo-frame">
+                <img src="ski.jpg" alt="Début" class="photo-frame">
                 <h2>Le début d'une belle histoire</h2>
-                <p>Suite à 2 mois à vivre comme un vrai couple, sans réellement mettre un mot sur notre relation, nous décidons d'un weekend romantique entre ski, randonnée et visite de Lyon, et nous concluons en débutant une belle histoire.</p>
+                <p>Suite à 2 mois à vivre comme un vrai couple, nous décidons d'un weekend romantique entre ski, randonnée et visite de Lyon, et nous concluons en débutant une belle histoire.</p>
             </div>
         </div>
 
         <div class="container right">
             <div class="content">
                 <span class="date">Mars 2024</span>
-                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Voyage" class="photo-frame">
+                <img src="toulouse.jpg" alt="Toulouse" class="photo-frame">
                 <h2>La toile d'araignée</h2>
                 <p>Même avec la distance nous arrivions à créer une relation. Tu es même venue me voir à Toulouse et nous y avons fait beaucoup de bêtises.</p>
             </div>
